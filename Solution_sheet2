@@ -1,0 +1,40 @@
+Sheet 2
+
+1 c)
+> (append l l1)
+'(0 1 2 4 5 6)
+
+1 d)
+(define (flatten l)
+    (if (null? (car l))
+        '() (if (number? (car l))
+                (append (makelist (car l)) (flatten (cdr l)))
+                (append  (car l) (flatten (cdr l)))
+            )
+    )
+)
+(define (makelist x)
+    (cons x '())
+)
+
+1 e)
+(define (revlist l)
+    (if (null? (cdr l))
+        (makelist (car l)) (append (revlist (cdr l)) (makelist (car l)))
+    )
+)
+(define (makelist x)
+    (cons x '())
+)
+
+3 k)
+(define (remove-all s los)
+    (if (null? los)
+        '() (if (eq? (car los) s)
+                (append '() (remove-all s (cdr los))) 
+                (append (cons (car los) '()) (remove-all s (cdr los))) 
+        )
+    
+    )
+)
+

@@ -1,0 +1,207 @@
+Functional programming implemented in Scheme using racket v7.0
+
+Sheet 1
+
+1 a) 
+> (define add 
+     (lambda (x y)
+        (+ x y)
+  ))
+> (add 3 4)
+7
+
+1 b) 
+> (define mul 
+     (lambda (x y)
+        (* x y)
+  ))
+> (mul 3 4)
+12
+
+1 c) 
+> (define add
+     (lambda (x y)
+        (if (number? x)
+           (if (number? y)
+              (+ x y) #f)
+           #f)
+  ))
+> (add 3 4)   
+7                                                                  
+> (add #\a #\b)
+#f 
+
+1 d)
+(define (datatype x)
+  (cond
+     [(boolean? x) 'boolean ]
+     [(symbol? x) 'symbol ]
+     [(char? x) 'char ]
+     [(vector? x) 'vector ]
+     [(number? x) 'number ]
+     [(procedure? x) 'procedure ]
+     [(pair? x) 'pair ]
+     [(string? x) 'string ]
+     [(port? x) 'port ]
+  )
+)
+> (datatype "fy")
+'string
+
+1 e) > (define (sum a)
+    (if (= a 0)
+      0 (+ a (sum (- a 1)))
+  ))
+> (sum 5)
+15
+
+1 g)
+> (define (acc a s)
+    (if (= a 0)
+        0 (s a (sum (- a 1)))
+    )
+  )
+> (acc 5 +)
+15
+
+1 h)
+> (define (general start end sym)
+    (if (= start end)
+      end
+      (sym start (general (+ start 1) end sym))
+    )
+  )
+> (general 1 4 +)                                                             
+10
+> (general 1 4 *)
+24
+> (general -1 4 *)
+0
+> (general -1 4 +)
+9
+
+3 b) 
+(define (natural l)
+    (if (null? l)
+        #t
+    (if (< (car l) 1)
+    #f (and #t (natural (cdr l)))
+    )
+    )	
+)
+> (define l (list 0 1 2))
+> (natural l)
+#f
+
+3 c)
+(define (sum l n)
+    (if (= n 0)
+        0 (+ (car l) (sum (cdr l) (- n 1)))
+    )
+)
+> (define l (list 1 2 3 4 5 6 7 8 9 10))
+> l
+'(1 2 3 4 5 6 7 8 9 10)
+> (sum l 3)
+6
+> (sum l 8)
+36
+
+3 d)
+(define (make-list n l)
+    (if (> n 0)
+        (append (makelist (car l)) (make-list (- n 1) (cdr l))) '()
+    )
+)
+(define (makelist x)
+    (cons x '())
+)
+> (make-list 4 l)   
+'(1 2 3 4)
+
+3 e)
+(define get-Type
+  (lambda (x)
+    (cond ((number? x) "Number")
+          ((pair? x) "Pair")
+          ((string? x) "String")
+          ((vector? x) "Vector")
+          ((boolean? x) "Boolean")
+          ((symbol? x) "Symbol")
+          ((char? x) "Char")
+          ((procedure? x) "Procedure")
+          ((port? x) "Port")
+    )
+  )
+)
+(define (getcar l)
+    (car l)
+) 
+(define (check s l)
+    (if (null? l)
+        #t (if (eqv? s (get-Type (car l))) 
+                (check s (cdr l)) #f
+            )
+    )
+)
+> (define l (list 1 2 3 4 "lamb"))
+> (check (get-Type (car l)) l)
+#f
+> (define l (list #t #f))
+> (check (get-Type (car l)) l)
+#t
+
+4 a)
+(define (gen num)
+    (if (> num 0)
+        (append (makelist (random 1 100)) (gen (- num 1) )) '()
+    )
+)
+(define (sum l n)
+    (if (= n 0)
+        0 (+ (car l) (sum (cdr l) (- n 1)))
+    )
+)
+(sum (gen num) 3)
+
+4b)
+(define (my-map sym l)
+    (if (null? l)
+        '() (append (makelist (sym (car l))) (my-map sym (cdr l)) )
+    )
+)
+(define (makelist x)
+    (cons x '())
+)
+> (my-map sin l)
+'(0 1.0 1.2246467991473532e-16 -1.0 -2.4492935982947064e-16)
+
+4 c)
+(define (differentiate f h)
+    (lambda (x)
+        (/ (- (f (+ x h)) (f x)) h)
+    )
+)
+(define (sin-x x)
+    ((differentiate sin 0.00001) x)
+)
+> (sin-x pi)                                                                    
+-0.9999999999898844
+
+4 d)
+> l
+'(0 1.5707963267948966 3.141592653589793 4.71238898038469 6.283185307179586)
+> (my-map sin-x l)
+'(0.9999999999833332
+  -5.000000413701855e-06
+  -0.9999999999898844
+  5.000000413701855e-06
+  0.9999999999454756)
+
+4 f)
+(define (compose f g) 
+(lambda (x) 
+    (f (g x))
+)
+)
+
